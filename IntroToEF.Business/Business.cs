@@ -2,6 +2,7 @@
 using IntroToEF.Data.Repositories;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 using System.Threading.Channels;
 using System.Xml;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
@@ -21,11 +22,7 @@ namespace IntroToEF.Business
 
         public void RunApp()
             {
-            Console.WriteLine("What?");
-            Console.WriteLine("1. Create a new Samurai");
-            Console.WriteLine("2. Add Horses to a Samurai");
-            Console.WriteLine("3. Show samurai info");
-            Console.WriteLine("4. See all samurais with horses");
+            ShowMenu();
 
             int userInput = Convert.ToInt32(Console.ReadLine());
 
@@ -36,7 +33,7 @@ namespace IntroToEF.Business
                     break;
 
                 case 2:
-                    Console.WriteLine("Give Samurasi ID: ");
+                    Console.WriteLine("Give Samurais ID: ");
                     int samuraiID = Convert.ToInt32(Console.ReadLine());
                     var sum = FindSamuraiById(samuraiID);
                     Console.WriteLine("Give a name of the Horse: ");
@@ -60,12 +57,27 @@ namespace IntroToEF.Business
                     break;
 
                 case 4:
-                    Console.WriteLine();
+                    List<Samurai> allSamurai = new List<Samurai>();
+                    allSamurai = _repo.GetSamurais();
+
+                    foreach (Samurai thisdude in allSamurai.Where(thisdude => thisdude.Horses.Count > 0))
+                        {
+                        }
+
                     break;
 
                 default:
                     break;
                 }
+            }
+
+        private static void ShowMenu()
+            {
+            Console.WriteLine("What?");
+            Console.WriteLine("1. Create a new Samurai");
+            Console.WriteLine("2. Add Horses to a Samurai");
+            Console.WriteLine("3. Show samurai info");
+            Console.WriteLine("4. See all samurais with horses");
             }
 
         private void Writehorses(Samurai thissamurai)
