@@ -18,8 +18,7 @@ namespace IntroToEF.Data
         // Override the OnConfigure to dictate which database is being used and the type of said DB
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(CONNECTION)
-                .LogTo(Console.WriteLine);
+            optionsBuilder.UseSqlServer(CONNECTION);
         }
     }
 }

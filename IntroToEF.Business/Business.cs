@@ -1,6 +1,7 @@
 ﻿using IntroToEF.Data.Entities;
 using IntroToEF.Data.Repositories;
 using System.Collections.Generic;
+using System;
 
 namespace IntroToEF.Business
 {
@@ -16,14 +17,37 @@ namespace IntroToEF.Business
 
         public void RunApp()
         {
-            //RenameSamurai(9, "I was changed from the app");
-            //RenameMultipleSamurais();
-            //RemoveSamurai(10);
+            //CreateANewSamurai();
+           
+            Console.WriteLine("Give Samurasi ID: ");
+            int samuraiID = Convert.ToInt32(Console.ReadLine());
+            var sum = FindSamuraiById(samuraiID);
+            sum.Horses.Add(new Horse 
+                {
+                Name ="Voukefalas"
+                });
 
-            //AddSamuraiWhoFoughtInBattles();
-            //var sam = GetSamuraiWithBattles(12);
-            var SPResult = GetSamuraiWhoSaidAWord("thank");
+            _repo.UpdateSamurai(sum);
         }
+
+        private void CreateANewSamurai()
+        {
+            Console.WriteLine("Hello. Please enter a name for your Samurai:");
+            string name = Console.ReadLine();
+            Console.WriteLine("Dynasty of your Samurai");
+            string dynasty = Console.ReadLine();
+            _repo.AddSamurai(name, dynasty);
+            Console.ReadLine();
+        }
+
+        private Samurai FindSamuraiById(int id)
+        {
+            Samurai sum = _repo.GetSamurai(id);
+            Console.WriteLine($"Name: {sum.Name} Dynasty: {sum.Dynasty}");
+            return sum;
+        }
+
+
 
         public List<Samurai> GetSamuraiWhoSaidAWord(string word)
         {

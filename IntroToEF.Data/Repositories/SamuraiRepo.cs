@@ -16,20 +16,23 @@ namespace IntroToEF.Data.Repositories
             context = new SamuraiContext();
         }
 
-        public void AddSamurai(string name)
+        public void AddSamurai(string name, string dynasty)
         {
             // Create a single object to be inserted
             var samurai = new Samurai
             {
-                Name = name
+                Name = name,
+                Dynasty = dynasty
+
             };
 
+            AddSamurai(samurai);
             // Add object(s) to be tracked by context
             // Specify target table and data to be added
-            context.Samurais.Add(samurai);
+            //context.Samurais.Add(samurai);
 
             // Push changes to DB
-            context.SaveChanges();
+            //context.SaveChanges();
         }
 
         public void AddSamurai(Samurai samurai)
@@ -60,7 +63,7 @@ namespace IntroToEF.Data.Repositories
             else
             {
                 // Find a single object in a table by id -> No related data
-                 samurai = context.Samurais.Find(id);
+                samurai = context.Samurais.Find(id);
             }
 
             return samurai;
@@ -103,7 +106,7 @@ namespace IntroToEF.Data.Repositories
             // Using a find(id) does the exact same thing as below
             var samurai = context.Samurais
                 .Include(x => x.Horses)
-                .Include(x => x.Quotes.Where (y => y.Text.Contains("thank")))
+                .Include(x => x.Quotes.Where(y => y.Text.Contains("thank")))
                 .FirstOrDefault(x => x.Id == id);
 
             return samurai;
@@ -177,10 +180,10 @@ namespace IntroToEF.Data.Repositories
             context.SaveChanges();
         }
 
-        Samurai ISamuraiRepo.GetSamuraiWhereNameContains(string text)
-        {
-            throw new NotImplementedException();
-        }
+        //Samurai ISamuraiRepo.GetSamuraiWhereNameContains(string text)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public List<Samurai> GetResultFromStoredProcedure(string text)
         {
