@@ -1,0 +1,10 @@
+SELECT s.Name, COUNT(h.Id) as "Horses"
+FROM
+    dbo.Samurais as s
+
+    JOIN dbo.Horses  as h
+
+    ON s.Id = h.SamuraiId
+
+GROUP BY s.Name
+ORDER BY Horses DESC
