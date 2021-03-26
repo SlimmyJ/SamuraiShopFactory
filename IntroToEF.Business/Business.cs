@@ -17,17 +17,34 @@ namespace IntroToEF.Business
 
         public void RunApp()
         {
-            //CreateANewSamurai();
-           
-            Console.WriteLine("Give Samurasi ID: ");
-            int samuraiID = Convert.ToInt32(Console.ReadLine());
-            var sum = FindSamuraiById(samuraiID);
-            sum.Horses.Add(new Horse 
-                {
-                Name ="Voukefalas"
-                });
+            Console.WriteLine("What?");
+            Console.WriteLine("1. Create a new Samurai");
+            Console.WriteLine("2. Add Horses to a Samurai");
 
-            _repo.UpdateSamurai(sum);
+            int userInput = Convert.ToInt32(Console.ReadLine());
+
+            switch (userInput)
+            {
+                case 1:
+                    CreateANewSamurai();
+                    break;
+
+                case 2:
+                    Console.WriteLine("Give Samurasi ID: ");
+                    int samuraiID = Convert.ToInt32(Console.ReadLine());
+                    var sum = FindSamuraiById(samuraiID);
+                    Console.WriteLine("Give a name of the Horse: ");
+                    string name = Console.ReadLine();
+                    sum.Horses.Add(new Horse
+                    {
+                        Name = name
+                    });
+
+                    _repo.UpdateSamurai(sum);
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void CreateANewSamurai()
@@ -46,6 +63,21 @@ namespace IntroToEF.Business
             Console.WriteLine($"Name: {sum.Name} Dynasty: {sum.Dynasty}");
             return sum;
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
