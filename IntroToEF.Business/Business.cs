@@ -1,11 +1,9 @@
-﻿using IntroToEF.Data.Entities;
-using IntroToEF.Data.Repositories;
+﻿using System;
 using System.Collections.Generic;
-using System;
 using System.Linq;
-using System.Threading.Channels;
-using System.Xml;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+
+using IntroToEF.Data.Entities;
+using IntroToEF.Data.Repositories;
 
 namespace IntroToEF.Business
     {
@@ -24,51 +22,78 @@ namespace IntroToEF.Business
             {
             ShowMenu();
 
-            int userInput = Convert.ToInt32(Console.ReadLine());
+            var userInput = Convert.ToInt32(Console.ReadLine());
 
             switch (userInput)
                 {
                 case 1:
-                    CreateANewSamurai();
-                    break;
-
-                case 2:
-                    Console.WriteLine("Give Samurais ID: ");
-                    int samuraiID = Convert.ToInt32(Console.ReadLine());
-                    var sum = FindSamuraiById(samuraiID);
-                    Console.WriteLine("Give a name of the Horse: ");
-                    string name = Console.ReadLine();
-                    sum.Horses.Add(new Horse
                         {
-                        Name = name
-                        });
-
-                    _repo.UpdateSamurai(sum);
-                    break;
-
-                case 3:
-                    Console.WriteLine("Enter the samurai's ID:");
-                    int userinput = Convert.ToInt32(Console.ReadLine());
-                    var thissamurai = FindSamuraiById(userinput);
-
-                    Console.WriteLine($"This samurais name is {thissamurai.Name}");
-                    Writehorses(thissamurai);
-
-                    break;
-
-                case 4:
-                    List<Samurai> allSamurai = new List<Samurai>();
-                    allSamurai = _repo.GetSamurais();
-
-                    foreach (Samurai thisdude in allSamurai.Where(thisdude => thisdude.Horses.Count > 0))
-                        {
+                        CreateANewSamurai();
+                        break;
                         }
 
-                    break;
+                case 2:
+                        {
+                        Samurai samuraiFoundById = GetSamuraiConsole();
+                        AddHorseToSamurai(samuraiFoundById);
+                        _repo.UpdateSamurai(samuraiFoundById);
+
+                        break;
+                        }
+
+                case 3:
+                        {
+                        Console.WriteLine("Enter the samurai's ID:");
+                        var userinput = Convert.ToInt32(Console.ReadLine());
+                        Samurai thissamurai = FindSamuraiById(userinput);
+
+                        Console.WriteLine($"This samurais name is {thissamurai.Name}");
+                        Writehorses(thissamurai);
+
+                        break;
+                        }
+
+                case 4:
+                        {
+                        List<Samurai> allSamurai = _repo.GetSamurais();
+
+                        foreach (Samurai thisdude in allSamurai.Where(thisdude => thisdude.Horses.Count > 0))
+                            {
+                            Console.WriteLine(".........SAMURAI...........");
+                            Console.WriteLine("...........................");
+                            Console.WriteLine(thisdude.Name);
+                            Console.WriteLine("...........................");
+                            Console.WriteLine(".........HORSES............");
+
+                            foreach (Horse horse in thisdude.Horses) Console.WriteLine(horse.Name);
+
+                            Console.WriteLine("...........................");
+                            }
+
+                        break;
+                        }
 
                 default:
                     break;
                 }
+
+            Console.ReadKey();
+            }
+
+        private void AddHorseToSamurai(Samurai samurai)
+            {
+            Console.WriteLine("Give type the name of the horse you wish to add: ");
+            string nameOfNewHorse = Console.ReadLine();
+            var newHorse = new Horse { Name = nameOfNewHorse };
+            samurai.Horses.Add(newHorse);
+            }
+
+        private Samurai GetSamuraiConsole()
+            {
+            Console.WriteLine("Give Samurais ID: ");
+            var samuraiId = Convert.ToInt32(Console.ReadLine());
+            Samurai samuraiFoundById = FindSamuraiById(samuraiId);
+            return samuraiFoundById;
             }
 
         private static void ShowMenu()
@@ -82,10 +107,7 @@ namespace IntroToEF.Business
 
         private void Writehorses(Samurai thissamurai)
             {
-            foreach (Horse thisguyshorses in thissamurai.Horses)
-                {
-                Console.WriteLine(thisguyshorses.Name);
-                }
+            foreach (Horse thisguyshorses in thissamurai.Horses) Console.WriteLine(thisguyshorses.Name);
             }
 
         private void CreateANewSamurai()
@@ -163,32 +185,9 @@ namespace IntroToEF.Business
             _repo.AddSamurai(veteran);
             }
 
-        public void GetAllSamurais()
+        public void UpdateSamurais()
             {
-            var samurais = _repo.GetSamurais();
-            }
-
-        public void RenameSamurai(int id, string name)
-            {
-            // Get element from DB
-            Samurai samuraiToBeUpdated = _repo.GetSamurai(id);
-
-            // Perform changes
-            samuraiToBeUpdated.Name = name;
-
-            // Save object back to db
-            _repo.UpdateSamurai(samuraiToBeUpdated);
-            }
-
-        public void RenameMultipleSamurais()
-            {
-            // Bad practice -> Code in datalayer should go here.
             _repo.UpdateSamurais();
-            }
-
-        public Samurai GetSamuraiWithBattles(int id)
-            {
-            return _repo.GetSamurai(id, true);
             }
         }
     }
