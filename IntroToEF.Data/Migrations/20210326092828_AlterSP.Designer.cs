@@ -10,7 +10,7 @@ namespace IntroToEF.Data.Migrations
 {
     [DbContext(typeof(SamuraiContext))]
     [Migration("20210326092828_AlterSP")]
-    partial class AlterSP
+    partial class AlterSp
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

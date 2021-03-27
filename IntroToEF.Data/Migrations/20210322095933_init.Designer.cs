@@ -10,7 +10,7 @@ namespace IntroToEF.Data.Migrations
 {
     [DbContext(typeof(SamuraiContext))]
     [Migration("20210322095933_init")]
-    partial class init
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

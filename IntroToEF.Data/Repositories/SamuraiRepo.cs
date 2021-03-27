@@ -8,12 +8,12 @@ namespace IntroToEF.Data.Repositories
     {
     public class SamuraiRepo : ISamuraiRepo
         {
-        private SamuraiContext context;
+        private SamuraiContext _context;
 
         public SamuraiRepo()
             {
             // Open connection to database
-            context = new SamuraiContext();
+            _context = new SamuraiContext();
             }
 
         public void AddSamurai(string name, string dynasty)
@@ -26,24 +26,29 @@ namespace IntroToEF.Data.Repositories
                 };
 
             AddSamurai(samurai);
-            // Add object(s) to be tracked by context
+            // Add object(s) to be tracked by _context
             // Specify target table and data to be added
-            //context.Samurais.Add(samurai);
+            //_context.Samurais.Add(samurai);
 
             // Push changes to DB
-            //context.SaveChanges();
+            //_context.SaveChanges();
             }
 
         public void AddSamurai(Samurai samurai)
             {
-            context.Add(samurai);
-            context.SaveChanges();
+            _context.Add(samurai);
+            _context.SaveChanges();
             }
 
         public void AddSamurais(List<Samurai> samurais)
             {
-            context.AddRange(samurais);
-            context.SaveChanges();
+            _context.AddRange(samurais);
+            _context.SaveChanges();
+            }
+
+        public Battle FindBattleById(int id)
+            {
+            return _context.Battles.Find(id);
             }
 
         public Samurai GetSamurai(int id, bool fetchAllRelatedData = false)
@@ -53,7 +58,7 @@ namespace IntroToEF.Data.Repositories
             if (fetchAllRelatedData)
                 {
                 // Include all related data in query using LEFT OUTER JOINS.
-                samurai = context.Samurais
+                samurai = _context.Samurais
                     .Include(x => x.Horses)
                     .Include(x => x.Quotes)
                     .Include(x => x.Battles)
@@ -62,7 +67,7 @@ namespace IntroToEF.Data.Repositories
             else
                 {
                 // Find a single object in a table by id -> No related data
-                samurai = context.Samurais.Find(id);
+                samurai = _context.Samurais.Find(id);
                 }
 
             return samurai;
@@ -72,8 +77,8 @@ namespace IntroToEF.Data.Repositories
             {
             // Find a single object in a table by id
             var samurai =
-                context.Samurais
-                .FirstOrDefault(x => x.Name == name);
+                _context.Samurais
+                    .FirstOrDefault(x => x.Name == name);
 
             return samurai;
             }
@@ -82,17 +87,17 @@ namespace IntroToEF.Data.Repositories
             {
             // Find a single object in a table by id
             var samurai =
-                context.Samurais
-                .Include(x => x.Quotes)
-                .Where(x => x.Name == name)
-                .ToList();
+                _context.Samurais
+                    .Include(x => x.Quotes)
+                    .Where(x => x.Name == name)
+                    .ToList();
 
             return samurai;
             }
 
         public List<Samurai> GetSamuraiWhereNameContains(string text)
             {
-            var samurai = context.Samurais
+            var samurai = _context.Samurais
                 .Where(x => x.Name.Contains(text))
                 .OrderByDescending(x => x.Name)
                 .ToList();
@@ -103,7 +108,7 @@ namespace IntroToEF.Data.Repositories
         public Samurai GetSamuraiWithIncludedData(int id)
             {
             // Using a find(id) does the exact same thing as below
-            var samurai = context.Samurais
+            var samurai = _context.Samurais
                 .Include(x => x.Horses)
                 .Include(x => x.Quotes.Where(y => y.Text.Contains("thank")))
                 .FirstOrDefault(x => x.Id == id);
@@ -111,11 +116,25 @@ namespace IntroToEF.Data.Repositories
             return samurai;
             }
 
+        public List<Samurai> GetSamuraiWithBattles(int battleId)
+            {
+            throw new NotImplementedException();
+            }
+
+        //public List<Samurai> GetSamuraiWithBattles(int battleId)
+        //    {
+        //    // Using a find(id) does the exact same thing as below
+        //    var samurai = _context.Samurais
+        //        .Include(x => x.Battles.Where(y => x.Battles.Contains())
+        //            .ToList();
+
+        // return samurai; }
+
         public List<Samurai> GetSamuraiWithHorses(int id)
             {
-            var samurai = context.Samurais
-            .Include(x => x.Horses)
-            .ToList();
+            var samurai = _context.Samurais
+                .Include(x => x.Horses)
+                .ToList();
 
             return samurai;
             }
@@ -123,7 +142,7 @@ namespace IntroToEF.Data.Repositories
         public List<Samurai> GetSamurais()
             {
             // Include data in related tables
-            return context.Samurais
+            return _context.Samurais
                 .Include(x => x.Quotes)
                 .Include(x => x.Horses)
                 .ToList();
@@ -131,13 +150,13 @@ namespace IntroToEF.Data.Repositories
 
         public void UpdateSamurai(Samurai samurai)
             {
-            context.SaveChanges();
+            _context.SaveChanges();
             }
 
         public void UpdateSamurais()
             {
             // Get samurais -> Skip the first four rows, then take three
-            List<Samurai> samurais = context.Samurais
+            List<Samurai> samurais = _context.Samurais
                 .Skip(1)
                 .Take(6)
                 .ToList();
@@ -150,7 +169,7 @@ namespace IntroToEF.Data.Repositories
                 samurai.Dynasty = "Sengoku";
                 }
 
-            context.SaveChanges();
+            _context.SaveChanges();
             }
 
         public void GetSamuraiWithSql()
@@ -161,8 +180,8 @@ namespace IntroToEF.Data.Repositories
         public void DeleteSamurai(int id)
             {
             Samurai samurai = GetSamurai(id);
-            context.Samurais.Remove(samurai);
-            context.SaveChanges();
+            _context.Samurais.Remove(samurai);
+            _context.SaveChanges();
             }
 
         public void AddDifferentObjectsToContext()
@@ -182,9 +201,9 @@ namespace IntroToEF.Data.Repositories
                 Name = "Jolly jumper"
                 };
 
-            context.Add(quote);
-            context.Add(horse);
-            context.SaveChanges();
+            _context.Add(quote);
+            _context.Add(horse);
+            _context.SaveChanges();
             }
 
         //Samurai ISamuraiRepo.GetSamuraiWhereNameContains(string text)
@@ -194,8 +213,8 @@ namespace IntroToEF.Data.Repositories
 
         public List<Samurai> GetResultFromStoredProcedure(string text)
             {
-            var samurais = context.Samurais.FromSqlRaw(
-                "EXEC [dbo].[SamuraisWhoSaidAWord] {0}", text)
+            var samurais = _context.Samurais.FromSqlRaw(
+                    "EXEC [dbo].[SamuraisWhoSaidAWord] {0}", text)
                 .ToList();
 
             return samurais;

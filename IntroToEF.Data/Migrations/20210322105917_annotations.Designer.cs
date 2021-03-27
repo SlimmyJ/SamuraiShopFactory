@@ -10,7 +10,7 @@ namespace IntroToEF.Data.Migrations
 {
     [DbContext(typeof(SamuraiContext))]
     [Migration("20210322105917_annotations")]
-    partial class annotations
+    partial class Annotations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

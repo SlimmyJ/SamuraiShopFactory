@@ -2,7 +2,7 @@
 
 namespace IntroToEF.Data.Migrations
 {
-    public partial class annotations : Migration
+    public partial class Annotations : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

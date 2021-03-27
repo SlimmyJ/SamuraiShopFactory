@@ -2,7 +2,7 @@
 
 namespace IntroToEF.Data.Migrations
 {
-    public partial class dynasty : Migration
+    public partial class Dynasty : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

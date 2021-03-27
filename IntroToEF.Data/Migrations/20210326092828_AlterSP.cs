@@ -2,7 +2,7 @@
 
 namespace IntroToEF.Data.Migrations
 {
-    public partial class AlterSP : Migration
+    public partial class AlterSp : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

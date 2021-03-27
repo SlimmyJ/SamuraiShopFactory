@@ -1,39 +1,27 @@
-﻿using IntroToEF.Data.Entities;
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using IntroToEF.Data.Entities;
 
 namespace IntroToEF.Data.Repositories
-    {
+{
     public interface ISamuraiRepo
-        {
-        void AddDifferentObjectsToContext();
-
-        void AddSamurai(Samurai samurai);
-
+    {
         void AddSamurai(string name, string dynasty);
-
+        void AddSamurai(Samurai samurai);
         void AddSamurais(List<Samurai> samurais);
-
-        void DeleteSamurai(int id);
-
-        List<Samurai> GetResultFromStoredProcedure(string text);
-
-        Samurai GetSamurai(int id, bool fetchAllRelatedData = false); //CHECK THIS
-
+        Battle FindBattleById(int id);
+        Samurai GetSamurai(int id, bool fetchAllRelatedData = false);
         Samurai GetSamuraiByName(string name);
-
-        List<Samurai> GetSamurais();
-
         List<Samurai> GetSamuraisByName(string name);
-
         List<Samurai> GetSamuraiWhereNameContains(string text);
-
         Samurai GetSamuraiWithIncludedData(int id);
-
-        void GetSamuraiWithSql();
-
+        List<Samurai> GetSamuraiWithBattles(int battleId);
+        List<Samurai> GetSamuraiWithHorses(int id);
+        List<Samurai> GetSamurais();
         void UpdateSamurai(Samurai samurai);
-
         void UpdateSamurais();
-        }
+        void GetSamuraiWithSql();
+        void DeleteSamurai(int id);
+        void AddDifferentObjectsToContext();
+        List<Samurai> GetResultFromStoredProcedure(string text);
     }
+}

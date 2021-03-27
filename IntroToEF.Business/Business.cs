@@ -43,12 +43,12 @@ namespace IntroToEF.Business
 
                 case 3:
                         {
-                        Console.WriteLine("Enter the samurai's ID:");
-                        var userinput = Convert.ToInt32(Console.ReadLine());
-                        Samurai thissamurai = FindSamuraiById(userinput);
+                        Console.WriteLine("Enter the Samurai ID:");
+                        var idGivenByUser = Convert.ToInt32(Console.ReadLine());
+                        Samurai thisSamurai = FindSamuraiById(idGivenByUser);
 
-                        Console.WriteLine($"This samurais name is {thissamurai.Name}");
-                        Writehorses(thissamurai);
+                        Console.WriteLine($"This samurais name is {thisSamurai.Name}");
+                        Writehorses(thisSamurai);
 
                         break;
                         }
@@ -73,8 +73,18 @@ namespace IntroToEF.Business
                         break;
                         }
 
-                default:
-                    break;
+                case 5:
+                        {
+                        Console.WriteLine("Give a Battle ID:");
+                        int userBattleId = Convert.ToInt32(Console.ReadLine());
+
+                        //Console.WriteLine("The Samurais that fought in the selected battle are:");
+                        //foreach (var samurai in samuraisInAbattle)
+                        //    {
+                        //    Console.WriteLine(samurai.Name);
+                        //    }
+                        break;
+                        }
                 }
 
             Console.ReadKey();
@@ -103,6 +113,7 @@ namespace IntroToEF.Business
             Console.WriteLine("2. Add Horses to a Samurai");
             Console.WriteLine("3. Show samurai info");
             Console.WriteLine("4. See all samurais with horses");
+            Console.WriteLine("Show all samurais that fought in a particular battle");
             }
 
         private void Writehorses(Samurai thissamurai)

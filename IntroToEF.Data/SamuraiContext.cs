@@ -15,13 +15,19 @@ namespace IntroToEF.Data
         public DbSet<Samurai> Samurais { get; set; }
         public DbSet<Horse> Horses { get; set; }
         public DbSet<Battle> Battles { get; set; }
+        public DbSet<BattleSamurai> BattleSamurai { get; set; }
 
-        private const string CONNECTION = @"Server=DESKTOP-O401LGA;Database=SamuraiDB;Trusted_Connection=True;";
+        private const string Connection = @"Server=DESKTOP-O401LGA;Database=SamuraiDB;Trusted_Connection=True;";
 
         // Override the OnConfigure to dictate which database is being used and the type of said DB
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             {
-            optionsBuilder.UseSqlServer(CONNECTION);
+            optionsBuilder.UseSqlServer(Connection);
+            }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+            {
+            modelBuilder.Entity<BattleSamurai>().HasKey(battleSamurai => new { battleSamurai.SamuraisId, battleSamurai.BattlesId });
             }
         }
     }
