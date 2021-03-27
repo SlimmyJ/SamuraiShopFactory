@@ -13,10 +13,12 @@ namespace IntroToEF.Business
         {
         // Composition
         private ISamuraiRepo _repo;
+        private IBattleRepo _battle;
 
         public Business()
             {
             _repo = new SamuraiRepo();
+            _battle = new BattleRepo();
             }
 
         public void RunApp()
@@ -26,6 +28,8 @@ namespace IntroToEF.Business
             Console.WriteLine("2. Add Horses to a Samurai");
             Console.WriteLine("3. Show samurai info");
             Console.WriteLine("4. See all samurais with horses");
+            Console.WriteLine("5. See all samurais that fought in one battle");
+            Console.WriteLine("6. Show Samurai with all Data");
 
             int userInput = Convert.ToInt32(Console.ReadLine());
 
@@ -36,43 +40,75 @@ namespace IntroToEF.Business
                     break;
 
                 case 2:
-                    Console.WriteLine("Give Samurasi ID: ");
-                    int samuraiID = Convert.ToInt32(Console.ReadLine());
-                    var sum = FindSamuraiById(samuraiID);
-                    Console.WriteLine("Give a name of the Horse: ");
-                    string name = Console.ReadLine();
-                    sum.Horses.Add(new Horse
-                        {
-                        Name = name
-                        });
-
-                    _repo.UpdateSamurai(sum);
+                    GiveAHorseToASamurai();
                     break;
 
                 case 3:
                     Console.WriteLine("Enter the samurai's ID:");
                     int userinput = Convert.ToInt32(Console.ReadLine());
-                    var thissamurai = FindSamuraiById(userinput);
-
-                    Console.WriteLine($"This samurais name is {thissamurai.Name}");
-                    Writehorses(thissamurai);
-
+                    var thisSamurai = FindSamuraiById(userinput);
+                    Console.WriteLine($"This samurais name is {thisSamurai.Name}");
+                    Writehorses(thisSamurai);
                     break;
 
                 case 4:
-                    Console.WriteLine();
+                    ShowSamuraisWithHorses();
                     break;
 
+                case 5:
+                    Console.WriteLine("Give a Battle ID:");
+                    int userBattleID = Convert.ToInt32(Console.ReadLine());
+                    var samuraisInAbattle =  FindAllSamuraisThatFoughtInABattle(userBattleID);
+                    Console.WriteLine("The Samurais that fought in this battle are:");
+                    foreach (var mySamurai in samuraisInAbattle)
+                    {
+                        Console.WriteLine(mySamurai.Name);
+
+                    }
+
+                    break;
+
+                case 6:
+                    Console.WriteLine("Give Samurai ID");
+                    int userID = Convert.ToInt32(Console.ReadLine());
+                    var samurai = _repo.GetSamuraiWithIncludedData(userID);
+                    Console.WriteLine($"Your pick: {samurai.Name}");
+                    break;
                 default:
                     break;
                 }
             }
 
-        private void Writehorses(Samurai thissamurai)
+        private void ShowSamuraisWithHorses()
+        {
+            var samurais = FindAllSamuraisWithHorses();
+            foreach (var samurai in samurais)
             {
-            foreach (Horse thisguyshorses in thissamurai.Horses)
+                Console.WriteLine("Samurais without Horses: ");
+                Console.WriteLine(samurai.Name);
+            }
+        }
+
+        private void GiveAHorseToASamurai()
+        {
+            Console.WriteLine("Give Samurai ID: ");
+            int samuraiID = Convert.ToInt32(Console.ReadLine());
+            var sum = FindSamuraiById(samuraiID);
+            Console.WriteLine("Give a name of the Horse: ");
+            string name = Console.ReadLine();
+            sum.Horses.Add(new Horse
+            {
+                Name = name
+            });
+
+            _repo.UpdateSamurai(sum);
+        }
+
+        private void Writehorses(Samurai thisSamurai)
+            {
+            foreach (Horse thisGuysHorses in thisSamurai.Horses)
                 {
-                Console.WriteLine(thisguyshorses.Name);
+                Console.WriteLine(thisGuysHorses.Name);
                 }
             }
 
@@ -92,6 +128,40 @@ namespace IntroToEF.Business
             Console.WriteLine($"Name: {sum.Name} Dynasty: {sum.Dynasty}");
             return sum;
             }
+
+
+        private List<Samurai> FindAllSamuraisWithHorses()
+        {
+            List<Samurai> allSamurais = GetAllSamurais();
+            var samuraisWithHorses = new List<Samurai>();
+
+            foreach (var samurai in allSamurais)
+            {
+                if (samurai.Horses.Count >0)
+                {
+                    samuraisWithHorses.Add(samurai);
+                }
+            }
+            return samuraisWithHorses;
+        }
+
+
+        private List<Samurai> FindAllSamuraisThatFoughtInABattle(int battleID)
+        {
+            var samouraisInThisBattle = new List<Samurai>();
+            var battle = _battle.FindBattleByID(battleID);
+            List<Samurai> allSamurais = GetAllSamurais();
+
+            foreach (var samurai in allSamurais)
+            {
+                if (samurai.Battles.Contains(battle))
+                {
+                    samouraisInThisBattle.Add(samurai);
+                }
+            }
+            return samouraisInThisBattle;
+        }
+
 
         public List<Samurai> GetSamuraiWhoSaidAWord(string word)
             {
@@ -151,9 +221,10 @@ namespace IntroToEF.Business
             _repo.AddSamurai(veteran);
             }
 
-        public void GetAllSamurais()
+        public List<Samurai> GetAllSamurais()
             {
-            var samurais = _repo.GetSamurais();
+            return  _repo.GetSamurais();
+
             }
 
         public void RenameSamurai(int id, string name)
