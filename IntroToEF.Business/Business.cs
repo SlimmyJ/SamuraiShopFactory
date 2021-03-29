@@ -29,7 +29,6 @@ namespace IntroToEF.Business
             Console.WriteLine("3. Show samurai info");
             Console.WriteLine("4. See all samurais with horses");
             Console.WriteLine("5. See all samurais that fought in one battle");
-            Console.WriteLine("6. Show Samurai with all Data");
 
             int userInput = Convert.ToInt32(Console.ReadLine());
 
@@ -56,28 +55,25 @@ namespace IntroToEF.Business
                     break;
 
                 case 5:
-                    Console.WriteLine("Give a Battle ID:");
-                    int userBattleID = Convert.ToInt32(Console.ReadLine());
-                    var samuraisInAbattle =  FindAllSamuraisThatFoughtInABattle(userBattleID);
-                    Console.WriteLine("The Samurais that fought in this battle are:");
-                    foreach (var mySamurai in samuraisInAbattle)
-                    {
-                        Console.WriteLine(mySamurai.Name);
-
-                    }
-
+                    ShowSamuraisThatFoughtInASpecificBattle();
                     break;
 
-                case 6:
-                    Console.WriteLine("Give Samurai ID");
-                    int userID = Convert.ToInt32(Console.ReadLine());
-                    var samurai = _repo.GetSamuraiWithIncludedData(userID);
-                    Console.WriteLine($"Your pick: {samurai.Name}");
-                    break;
                 default:
                     break;
                 }
             }
+
+        private void ShowSamuraisThatFoughtInASpecificBattle()
+        {
+            Console.WriteLine("Give a Battle ID:");
+            int userBattleID = Convert.ToInt32(Console.ReadLine());
+            var samuraisInAbattle = _battle.GetSamuraisThatFoughtInASpecificBattle(userBattleID);
+            Console.WriteLine("The Samurais that fought in this battle are:");
+            foreach (var mySamurai in samuraisInAbattle)
+            {
+                Console.WriteLine(mySamurai.Name);
+            }
+        }
 
         private void ShowSamuraisWithHorses()
         {

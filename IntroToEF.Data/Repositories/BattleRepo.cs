@@ -16,10 +16,19 @@ namespace IntroToEF.Data.Repositories
             _context = new SamuraiContext();
         }
 
+        public List<Samurai> GetSamuraisThatFoughtInASpecificBattle(int battleId)
+        {
+            var mySamurai = _context.Battles
+                                    .Where(x => x.Id == battleId)
+                                    .SelectMany(y => y.Samurais)
+                                    .ToList();
+            return mySamurai;
+        }
+
         public List<Battle> GetAllBattles()
         {
             return _context.Battles.ToList();
-        }
+        } 
 
         public Battle FindBattleByID(int id)
         {

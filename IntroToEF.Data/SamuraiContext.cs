@@ -25,6 +25,4 @@ namespace IntroToEF.Data
             }
 
     }
-
-        
     }

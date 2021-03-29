@@ -187,11 +187,6 @@ namespace IntroToEF.Data.Repositories
             context.SaveChanges();
         }
 
-        //Samurai ISamuraiRepo.GetSamuraiWhereNameContains(string text)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
         public List<Samurai> GetResultFromStoredProcedure(string text)
         {
             var samurais = context.Samurais.FromSqlRaw(
@@ -200,6 +195,9 @@ namespace IntroToEF.Data.Repositories
 
             return samurais;
         }
+
+
+       
 
     }
 }

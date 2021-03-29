@@ -9,5 +9,7 @@ namespace IntroToEF.Data.Repositories
         void UpdateBattle(Battle battle);
         Battle FindBattleByID(int id);
         void AddBattle(string name, int year, string place);
+
+        List<Samurai> GetSamuraisThatFoughtInASpecificBattle(int userId);
     }
 }
