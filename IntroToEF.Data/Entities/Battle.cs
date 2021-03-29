@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IntroToEF.Data.Entities
-{
-    public class Battle
     {
+    public class Battle
+        {
         public int Id { get; set; }
 
         [Required]
@@ -21,5 +17,5 @@ namespace IntroToEF.Data.Entities
         public string Location { get; set; }
 
         public List<Samurai> Samurais { get; set; } = new List<Samurai>();
+        }
     }
-}

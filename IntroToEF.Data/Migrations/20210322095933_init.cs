@@ -1,19 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace IntroToEF.Data.Migrations
-{
-    public partial class Init : Migration
     {
-        protected override void Up(MigrationBuilder migrationBuilder)
+    public partial class Init : Migration
         {
+        protected override void Up(MigrationBuilder migrationBuilder)
+            {
             migrationBuilder.CreateTable(
                 name: "Samurais",
                 columns: table => new
-                {
+                    {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
+                    },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Samurais", x => x.Id);
@@ -22,12 +22,12 @@ namespace IntroToEF.Data.Migrations
             migrationBuilder.CreateTable(
                 name: "Quotes",
                 columns: table => new
-                {
+                    {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SamuraiId = table.Column<int>(type: "int", nullable: false)
-                },
+                    },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Quotes", x => x.Id);
@@ -43,15 +43,15 @@ namespace IntroToEF.Data.Migrations
                 name: "IX_Quotes_SamuraiId",
                 table: "Quotes",
                 column: "SamuraiId");
-        }
+            }
 
         protected override void Down(MigrationBuilder migrationBuilder)
-        {
+            {
             migrationBuilder.DropTable(
                 name: "Quotes");
 
             migrationBuilder.DropTable(
                 name: "Samurais");
+            }
         }
     }
-}

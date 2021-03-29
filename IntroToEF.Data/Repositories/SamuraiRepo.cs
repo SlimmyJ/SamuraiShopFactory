@@ -1,7 +1,9 @@
-﻿using IntroToEF.Data.Entities;
+﻿using System;
 using System.Collections.Generic;
-using System;
 using System.Linq;
+
+using IntroToEF.Data.Entities;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace IntroToEF.Data.Repositories
@@ -170,11 +172,6 @@ namespace IntroToEF.Data.Repositories
                 }
 
             _context.SaveChanges();
-            }
-
-        public void GetSamuraiWithSql()
-            {
-            string sql = @"SELECT * FROM USers Where UserId = @id";
             }
 
         public void DeleteSamurai(int id)

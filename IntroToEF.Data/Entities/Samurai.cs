@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace IntroToEF.Data.Entities
-{
-    public class Samurai
     {
+    public class Samurai
+        {
         public int Id { get; set; }
 
         [Required]
@@ -20,5 +20,5 @@ namespace IntroToEF.Data.Entities
         public List<Horse> Horses { get; set; } = new List<Horse>();
 
         public List<Battle> Battles { get; set; } = new List<Battle>();
+        }
     }
-}

@@ -2,8 +2,6 @@
 
 using Microsoft.EntityFrameworkCore;
 
-using System;
-
 namespace IntroToEF.Data
     {
     // Context is absolutely essential in EF -> MUST inherit from DBContext
@@ -15,7 +13,6 @@ namespace IntroToEF.Data
         public DbSet<Samurai> Samurais { get; set; }
         public DbSet<Horse> Horses { get; set; }
         public DbSet<Battle> Battles { get; set; }
-        public DbSet<BattleSamurai> BattleSamurai { get; set; }
 
         private const string Connection = @"Server=DESKTOP-O401LGA;Database=SamuraiDB;Trusted_Connection=True;";
 
@@ -23,11 +20,6 @@ namespace IntroToEF.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             {
             optionsBuilder.UseSqlServer(Connection);
-            }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-            {
-            modelBuilder.Entity<BattleSamurai>().HasKey(battleSamurai => new { battleSamurai.SamuraisId, battleSamurai.BattlesId });
             }
         }
     }
