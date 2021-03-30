@@ -10,7 +10,7 @@ namespace IntroToEF.Data.Migrations
 {
     [DbContext(typeof(SamuraiContext))]
     [Migration("20210324080805_dynasty")]
-    partial class dynasty
+    partial class Dynasty
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

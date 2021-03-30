@@ -68,8 +68,8 @@ namespace IntroToEF.Business
         private int AskUserForSamuraiId()
             {
             Console.WriteLine("Enter the samurai's ID:");
-            var Id = Convert.ToInt32(Console.ReadLine());
-            return Id;
+            int id = Convert.ToInt32(Console.ReadLine());
+            return id;
             }
 
         private void EditSamurai()
@@ -116,10 +116,10 @@ namespace IntroToEF.Business
         private void PrintSamuraisThatFoughtInASpecificBattle()
             {
             Console.WriteLine("Give a Battle ID:");
-            int userBattleID = Convert.ToInt32(Console.ReadLine());
-            var samuraisInAbattle = _battle.GetSamuraisThatFoughtInASpecificBattle(userBattleID);
+            var userBattleId = Convert.ToInt32(Console.ReadLine());
+            var samuraisInBattles = _battle.GetSamuraisThatFoughtInASpecificBattle(userBattleId);
             Console.WriteLine("The Samurais that fought in this battle are:");
-            foreach (var mySamurai in samuraisInAbattle)
+            foreach (var mySamurai in samuraisInBattles)
                 {
                 Console.WriteLine(mySamurai.Name);
                 }
@@ -137,24 +137,22 @@ namespace IntroToEF.Business
 
         private void GiveAHorseToASamurai()
             {
-            Console.WriteLine("Give Samurai ID: ");
-            int samuraiID = Convert.ToInt32(Console.ReadLine());
-
-            var sum = FindSamuraiById(samuraiID);
+            var id = AskUserForSamuraiId();
+            var sum = FindSamuraiById(id);
 
             Console.WriteLine("Give a name of the Horse: ");
 
-            string name = Console.ReadLine();
+            var newHorseName = Console.ReadLine();
 
             sum.Horses.Add(new Horse
                 {
-                Name = name
+                Name = newHorseName
                 });
 
             _repo.UpdateSamurai(sum);
             }
 
-        private void WriteHorses(Samurai thisSamurai)
+        private static void WriteHorses(Samurai thisSamurai)
             {
             foreach (Horse thisGuysHorses in thisSamurai.Horses)
                 {

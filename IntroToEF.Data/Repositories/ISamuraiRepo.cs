@@ -1,6 +1,6 @@
-﻿using IntroToEF.Data.Entities;
+﻿using System.Collections.Generic;
 
-using System.Collections.Generic;
+using IntroToEF.Data.Entities;
 
 namespace IntroToEF.Data.Repositories
     {

@@ -1,15 +1,19 @@
-﻿using IntroToEF.Data.Entities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+
+using IntroToEF.Data.Entities;
 
 namespace IntroToEF.Data.Repositories
-{
-    public interface IBattleRepo
     {
+    public interface IBattleRepo
+        {
         List<Battle> GetAllBattles();
+
         void UpdateBattle(Battle battle);
-        Battle FindBattleByID(int id);
+
+        Battle FindBattleById(int id);
+
         void AddBattle(string name, int year, string place);
 
         List<Samurai> GetSamuraisThatFoughtInASpecificBattle(int userId);
+        }
     }
-}

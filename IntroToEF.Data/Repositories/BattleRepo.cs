@@ -1,10 +1,7 @@
-﻿using IntroToEF.Data.Entities;
-
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using IntroToEF.Data.Entities;
 
 namespace IntroToEF.Data.Repositories
     {
@@ -19,10 +16,10 @@ namespace IntroToEF.Data.Repositories
 
         public List<Samurai> GetSamuraisThatFoughtInASpecificBattle(int battleId)
             {
-            var mySamurai = _context.Battles
-                                    .Where(x => x.Id == battleId)
-                .SelectMany(y => y.Samurais)
-                .ToList();
+            var mySamurai = new List<Samurai>();
+            foreach (var samurai in _context.Battles.Where(x => x.Id == battleId)
+                .SelectMany(y => y.Samurais))
+                mySamurai.Add(samurai);
             return mySamurai;
             }
 
@@ -31,7 +28,7 @@ namespace IntroToEF.Data.Repositories
             return _context.Battles.ToList();
             }
 
-        public Battle FindBattleByID(int id)
+        public Battle FindBattleById(int id)
             {
             return _context.Battles.Find(id);
             }

@@ -1,20 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace IntroToEF.Data.Migrations
-{
-    public partial class danger : Migration
     {
-        protected override void Up(MigrationBuilder migrationBuilder)
+    public partial class Danger : Migration
         {
+        protected override void Up(MigrationBuilder migrationBuilder)
+            {
             migrationBuilder.CreateTable(
                 name: "BattleSamurais",
                 columns: table => new
-                {
+                    {
                     SamuraisId = table.Column<int>(type: "int", nullable: false),
                     BattlesId = table.Column<int>(type: "int", nullable: false),
                     SamuraiId = table.Column<int>(type: "int", nullable: true),
                     BattleId = table.Column<int>(type: "int", nullable: true)
-                },
+                    },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_BattleSamurais", x => new { x.SamuraisId, x.BattlesId });
@@ -41,12 +41,12 @@ namespace IntroToEF.Data.Migrations
                 name: "IX_BattleSamurais_SamuraiId",
                 table: "BattleSamurais",
                 column: "SamuraiId");
-        }
+            }
 
         protected override void Down(MigrationBuilder migrationBuilder)
-        {
+            {
             migrationBuilder.DropTable(
                 name: "BattleSamurais");
+            }
         }
     }
-}

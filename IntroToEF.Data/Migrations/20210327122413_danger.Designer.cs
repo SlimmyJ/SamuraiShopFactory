@@ -11,7 +11,7 @@ namespace IntroToEF.Data.Migrations
 {
     [DbContext(typeof(SamuraiContext))]
     [Migration("20210327122413_danger")]
-    partial class danger
+    partial class Danger
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
