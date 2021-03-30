@@ -16,13 +16,12 @@ namespace IntroToEF.Data
         public DbSet<Horse> Horses { get; set; }
         public DbSet<Battle> Battles { get; set; }
 
-        private const string CONNECTION = @"Data Source=.\SQLEXPRESS;;Database=SamuraiDB;Trusted_Connection=True;";
+        private const string CONNECTION = @"Data Source=DESKTOP-O401LGA;Database=SamuraiDB;Trusted_Connection=True;";
 
         // Override the OnConfigure to dictate which database is being used and the type of said DB
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             {
             optionsBuilder.UseSqlServer(CONNECTION);
             }
-
-    }
+        }
     }

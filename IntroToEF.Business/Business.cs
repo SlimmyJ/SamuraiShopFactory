@@ -1,10 +1,8 @@
-﻿using IntroToEF.Data.Entities;
-using IntroToEF.Data.Repositories;
+﻿using System;
 using System.Collections.Generic;
-using System;
-using System.Threading.Channels;
-using System.Xml;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+
+using IntroToEF.Data.Entities;
+using IntroToEF.Data.Repositories;
 
 namespace IntroToEF.Business
     {
@@ -13,6 +11,7 @@ namespace IntroToEF.Business
         {
         // Composition
         private ISamuraiRepo _repo;
+
         private IBattleRepo _battle;
 
         public Business()
@@ -23,12 +22,7 @@ namespace IntroToEF.Business
 
         public void RunApp()
             {
-            Console.WriteLine("What?");
-            Console.WriteLine("1. Create a new Samurai");
-            Console.WriteLine("2. Add Horses to a Samurai");
-            Console.WriteLine("3. Show samurai info");
-            Console.WriteLine("4. See all samurais with horses");
-            Console.WriteLine("5. See all samurais that fought in one battle");
+            PrintMenu();
 
             int userInput = Convert.ToInt32(Console.ReadLine());
 
@@ -43,64 +37,124 @@ namespace IntroToEF.Business
                     break;
 
                 case 3:
-                    Console.WriteLine("Enter the samurai's ID:");
-                    int userinput = Convert.ToInt32(Console.ReadLine());
-                    var thisSamurai = FindSamuraiById(userinput);
-                    Console.WriteLine($"This samurais name is {thisSamurai.Name}");
-                    Writehorses(thisSamurai);
+                    PrintSamuraiInfo(AskUserForSamuraiId());
                     break;
 
                 case 4:
-                    ShowSamuraisWithHorses();
+                    PrintSamuraisWithHorses();
                     break;
 
                 case 5:
-                    ShowSamuraisThatFoughtInASpecificBattle();
+                    PrintSamuraisThatFoughtInASpecificBattle();
                     break;
 
-                default:
+                case 6:
+
+                    EditSamurai();
+                    PrintEditMenu();
+                    GetUserInt(6);
+
                     break;
                 }
             }
 
-        private void ShowSamuraisThatFoughtInASpecificBattle()
-        {
+        private void PrintSamuraiInfo(int id)
+            {
+            var thisSamurai = FindSamuraiById(id);
+            Console.WriteLine($"This samurais name is {thisSamurai.Name}");
+            WriteHorses(thisSamurai);
+            }
+
+        private int AskUserForSamuraiId()
+            {
+            Console.WriteLine("Enter the samurai's ID:");
+            var Id = Convert.ToInt32(Console.ReadLine());
+            return Id;
+            }
+
+        private void EditSamurai()
+            {
+            }
+
+        private static void PrintMenu()
+            {
+            Console.WriteLine("SAMURAI MENU:");
+            Console.WriteLine("1. Create a new Samurai");
+            Console.WriteLine("2. Add Horses to a Samurai");
+            Console.WriteLine("3. Show samurai info");
+            Console.WriteLine("4. See all samurais with horses");
+            Console.WriteLine("5. See all samurais that fought in one battle");
+            Console.WriteLine("6. Edit Samurai");
+            }
+
+        private static int GetUserInt(int top)
+            {
+            var v = Console.ReadLine();
+            if (v != null)
+                {
+                var usersChoice = int.Parse(s: v);
+                if (usersChoice <= top) return usersChoice;
+                PrintEditMenu();
+                return 0;
+                }
+
+            Console.WriteLine("Invalid Command");
+            return 0;
+            }
+
+        private static void PrintEditMenu()
+            {
+            Console.WriteLine("EDIT SAMURAI MENU:");
+            Console.WriteLine("1. Name");
+            Console.WriteLine("2. Dynasty");
+            Console.WriteLine("3. Quotes");
+            Console.WriteLine("4. Horses");
+            Console.WriteLine("5. Battles");
+            Console.WriteLine("6. SAVE");
+            }
+
+        private void PrintSamuraisThatFoughtInASpecificBattle()
+            {
             Console.WriteLine("Give a Battle ID:");
             int userBattleID = Convert.ToInt32(Console.ReadLine());
             var samuraisInAbattle = _battle.GetSamuraisThatFoughtInASpecificBattle(userBattleID);
             Console.WriteLine("The Samurais that fought in this battle are:");
             foreach (var mySamurai in samuraisInAbattle)
-            {
+                {
                 Console.WriteLine(mySamurai.Name);
+                }
             }
-        }
 
-        private void ShowSamuraisWithHorses()
-        {
+        private void PrintSamuraisWithHorses()
+            {
             var samurais = FindAllSamuraisWithHorses();
             foreach (var samurai in samurais)
-            {
+                {
                 Console.WriteLine("Samurais without Horses: ");
                 Console.WriteLine(samurai.Name);
+                }
             }
-        }
 
         private void GiveAHorseToASamurai()
-        {
+            {
             Console.WriteLine("Give Samurai ID: ");
             int samuraiID = Convert.ToInt32(Console.ReadLine());
+
             var sum = FindSamuraiById(samuraiID);
+
             Console.WriteLine("Give a name of the Horse: ");
+
             string name = Console.ReadLine();
+
             sum.Horses.Add(new Horse
-            {
+                {
                 Name = name
-            });
+                });
 
             _repo.UpdateSamurai(sum);
-        }
+            }
 
-        private void Writehorses(Samurai thisSamurai)
+        private void WriteHorses(Samurai thisSamurai)
             {
             foreach (Horse thisGuysHorses in thisSamurai.Horses)
                 {
@@ -121,48 +175,23 @@ namespace IntroToEF.Business
         private Samurai FindSamuraiById(int id)
             {
             Samurai sum = _repo.GetSamurai(id, true);
-            Console.WriteLine($"Name: {sum.Name} Dynasty: {sum.Dynasty}");
+            Console.WriteLine($"Name: {sum.Name} Dynasty: {sum.Dynasty} found.");
             return sum;
             }
 
-
         private List<Samurai> FindAllSamuraisWithHorses()
-        {
+            {
             List<Samurai> allSamurais = GetAllSamurais();
             var samuraisWithHorses = new List<Samurai>();
 
             foreach (var samurai in allSamurais)
-            {
-                if (samurai.Horses.Count >0)
                 {
+                if (samurai.Horses.Count > 0)
+                    {
                     samuraisWithHorses.Add(samurai);
+                    }
                 }
-            }
             return samuraisWithHorses;
-        }
-
-
-        private List<Samurai> FindAllSamuraisThatFoughtInABattle(int battleID)
-        {
-            var samouraisInThisBattle = new List<Samurai>();
-            var battle = _battle.FindBattleByID(battleID);
-            List<Samurai> allSamurais = GetAllSamurais();
-
-            foreach (var samurai in allSamurais)
-            {
-                if (samurai.Battles.Contains(battle))
-                {
-                    samouraisInThisBattle.Add(samurai);
-                }
-            }
-            return samouraisInThisBattle;
-        }
-
-
-        public List<Samurai> GetSamuraiWhoSaidAWord(string word)
-            {
-            var result = _repo.GetResultFromStoredProcedure(word);
-            return result;
             }
 
         public void RemoveSamurai(int id)
@@ -170,80 +199,9 @@ namespace IntroToEF.Business
             _repo.DeleteSamurai(id);
             }
 
-        public void AddSamuraiWithHorses()
-            {
-            var samurai = new Samurai
-                {
-                Name = "Samurai With Horses",
-                Dynasty = "Sengoku",
-                Horses = new List<Horse>
-                {
-                    new Horse
-                    {
-                        IsWarHorse = true,
-                        Name = "Roach"
-                    },
-                    new Horse
-                    {
-                        IsWarHorse = false,
-                        Name = "Boeddika"
-                    }
-                }
-                };
-
-            _repo.AddSamurai(samurai);
-            }
-
-        public void AddSamuraiWhoFoughtInBattles()
-            {
-            Samurai veteran = new Samurai
-                {
-                Name = "A weary broken man",
-                Battles = new List<Battle>
-                {
-                    new Battle
-                    {
-                        Name = "Okinagawa",
-                        Year = 1557
-                    },
-                    new Battle
-                    {
-                        Name = "Fukushima",
-                        Year = 2011
-                    }
-                }
-                };
-
-            _repo.AddSamurai(veteran);
-            }
-
         public List<Samurai> GetAllSamurais()
             {
-            return  _repo.GetSamurais();
-
-            }
-
-        public void RenameSamurai(int id, string name)
-            {
-            // Get element from DB
-            Samurai samuraiToBeUpdated = _repo.GetSamurai(id);
-
-            // Perform changes
-            samuraiToBeUpdated.Name = name;
-
-            // Save object back to db
-            _repo.UpdateSamurai(samuraiToBeUpdated);
-            }
-
-        public void RenameMultipleSamurais()
-            {
-            // Bad practice -> Code in datalayer should go here.
-            _repo.UpdateSamurais();
-            }
-
-        public Samurai GetSamuraiWithBattles(int id)
-            {
-            return _repo.GetSamurai(id, true);
+            return _repo.GetSamurais();
             }
         }
     }
